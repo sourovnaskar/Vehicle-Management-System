@@ -40,7 +40,7 @@ app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 const router = require("./app/routes");
 app.use(router);
-const port = 7000;
+const port = 8001;
 app.listen(port, () => {
   console.log(`server running on : http://localhost:${port}`);
 });

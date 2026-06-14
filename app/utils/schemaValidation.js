@@ -15,4 +15,9 @@ const registerSchema = Joi.object({
     "any.required": "Please confirm Your password",
   }),
 });
-module.exports = registerSchema;
+
+const loginSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+});
+module.exports = { registerSchema, loginSchema };
