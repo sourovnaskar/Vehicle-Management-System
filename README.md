@@ -46,7 +46,7 @@ Make sure you have [Node.js](https://nodejs.org/) and [MongoDB](https://www.mong
 
 ### 1. Clone the repository
 
-git clone [https://github.com/yourusername/autospace-vsms.git](https://github.com/yourusername/autospace-vsms.git)
+git clone [https://github.com/sourovnaskar/autospace-vsms.git](https://github.com/yourusername/autospace-vsms.git)
 cd autospace-vsms
 2. Install dependencies
 Bash
