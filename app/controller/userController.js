@@ -6,7 +6,7 @@ const otpModel = require("../models/otpModel");
 
 class UserController {
   landingView(req, res) {
-    res.render("landingpage");
+    res.render("landingPage");
   }
   registerView(req, res) {
     res.render("Register", {
