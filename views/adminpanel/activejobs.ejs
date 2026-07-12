@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Job Cards - VSMS</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #fd7e14;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #444;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #fff8f3;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #555;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 8px 15px;
+            background-color: #e9ecef;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .btn-back:hover {
+            background-color: #fd7e14;
+            /* Your theme's orange */
+            color: white;
+        }
+
+        .description-cell {
+            max-width: 250px;
+            white-space: normal;
+            word-wrap: break-word;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .service-tags {
+            font-size: 0.85em;
+            background: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+
+        .btn-action {
+            background-color: #fd7e14;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-action:hover {
+            background-color: #e86c00;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .badge-assigned {
+            background-color: #28a745;
+            /* Success Green */
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* Container for floating notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            /* Ensures it stays on top of everything */
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Base style for the message boxes */
+        .toast-msg {
+            min-width: 250px;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            /* Adds a nice drop shadow */
+            font-weight: 500;
+            animation: slideInRight 0.4s ease-out forwards;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        /* Success Theme */
+        .toast-success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left: 6px solid #28a745;
+            /* Thicker accent border on the left */
+        }
+
+        /* Error Theme */
+        .toast-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left: 6px solid #dc3545;
+        }
+
+        /* The Slide-in Animation */
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* The Fade-out Class (Triggered by JS later) */
+        .toast-fade-out {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="toast-container">
+            <% if (errorMsg && errorMsg.length> 0) { %>
+                <div class="toast-msg toast-error">
+                    <%= errorMsg %>
+                </div>
+                <% } %>
+
+                    <% if (successMsg && successMsg.length> 0) { %>
+                        <div class="toast-msg toast-success">
+                            <%= successMsg %>
+                        </div>
+                        <% } %>
+        </div>
+
+        <div class="header-container">
+            <h1>Active Job Cards (Pending Assignment)</h1>
+            <a href="/admin/dashboard" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Vehicle Details</th>
+                    <th>Service Type</th>
+                    <th>Preferred Date</th>
+                    <th>Problem Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (serviceVehicle && serviceVehicle.length> 0) { %>
+                    <% serviceVehicle.forEach(function(job) { %>
+                        <tr>
+                            <td>
+                                <strong>
+                                    <%= job['details-customer'] ? job['details-customer'].name : 'Unknown' %>
+                                </strong>
+                            </td>
+
+                            <td>
+                                <% if (job['details-vehicle']) { %>
+                                    <strong>
+                                        <%= job['details-vehicle'].brand %>
+                                            <%= job['details-vehicle'].model %>
+                                    </strong><br>
+                                    <small style="color: #666;">
+                                        <%= job['details-vehicle'].vehicleNumber %>
+                                    </small>
+                                    <% } else { %>
+                                        N/A
+                                        <% } %>
+                            </td>
+
+                            <td>
+                                <% if (job.serviceType && job.serviceType.length> 0) {
+                                    %>
+                                    <% job.serviceType.forEach(function(type) { %>
+                                        <span class="service-tags">
+                                            <%= type %>
+                                        </span><br>
+                                        <% }); %>
+                                            <% } else { %>
+                                                N/A
+                                                <% } %>
+                            </td>
+
+                            <td>
+                                <strong>
+                                    <%= new Date(job.preferredDate).toLocaleDateString('en-IN', { weekday: 'short' ,
+                                        year: 'numeric' , month: 'short' , day: 'numeric' }) %>
+                                </strong>
+                            </td>
+
+                            <td class="description-cell">
+                                <%= job.description || 'No description provided.' %>
+                            </td>
+
+                            <td>
+                                <% if (job.status==='Pending' ) { %>
+                                    <a href="/admin/service/<%= job._id %>/assign" class="btn-action">Assign
+                                        Mechanic</a>
+                                    <% } else if (job.status==='In Progress' ) { %>
+                                        <span class="badge-assigned">✓ Mechanic
+                                            Assigned</span>
+                                        <% } %>
+                            </td>
+                        </tr>
+                        <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="6" class="empty-state">There are no
+                                        pending job cards
+                                        at the moment.
+                                    </td>
+                                </tr>
+                                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+
+        setTimeout(() => {
+            const toasts = document.querySelectorAll('.toast-msg');
+
+            toasts.forEach(toast => {
+
+                toast.classList.add('toast-fade-out');
+
+
+                setTimeout(() => toast.remove(), 400);
+            });
+        }, 1000); 
+    </script>
+
+</body>
+
+</html>

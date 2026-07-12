@@ -1,0 +1,36 @@
+{
+    "swaggerDefinition": {
+      "info": {
+        "title": "Test API",
+        "version": "1.0.0",
+        "description": "VSMS API documentation",
+        "contact": {
+          "name": "Sourov Naskar"
+        },
+        "servers": [
+          "http://localhost:8001"
+          
+        ]  
+      },
+      "tags": [
+        {
+            "name": "User",
+            "description": "User  API"
+        },
+        {
+            "name": "Admin",
+            "description": "Admin API"
+        },
+        {
+            "name": "Auth",
+            "description": "Auth API"
+        }
+    ],
+    "schemes": "['https', 'http']"
+      
+    },
+    "apis": [
+      "app.js",
+      "./app/routes/*.js"
+    ]
+  }

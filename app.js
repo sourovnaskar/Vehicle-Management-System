@@ -5,9 +5,14 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const ejs = require("ejs");
 const path = require("path");
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+const SwaggerOptions = require('./swagger.json');
+const swaggerDocument = swaggerJsDoc(SwaggerOptions);
 const flash = require("connect-flash");
 const connectDB = require("./app/config/db");
 connectDB();
+
 
 const app = express();
 app.use(cors());
@@ -37,9 +42,13 @@ app.use((req, res, next) => {
 });
 
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+app.use(express.static("public"));
 
 const router = require("./app/routes");
 app.use(router);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 const port = 8001;
 app.listen(port, () => {
   console.log(`server running on : http://localhost:${port}`);

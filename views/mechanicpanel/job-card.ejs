@@ -1,0 +1,140 @@
+<%- include('partials/header') %>
+    <%- include('partials/sidebar') %>
+
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <div id="content">
+                <%- include('partials/topbar') %>
+
+                    <div class="container-fluid">
+
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                            <h1 class="h3 mb-0 text-gray-800">
+                                <i class="fas fa-wrench text-gray-400 mr-2"></i> Active Job Card
+                            </h1>
+                            <a href="/mechanic/dashboard" class="btn btn-secondary btn-sm shadow-sm">
+                                <i class="fas fa-arrow-left fa-sm text-white-50 mr-1"></i> Back to Queue
+                            </a>
+                        </div>
+
+                        <%- include('partials/messages') %>
+
+                            <div class="row">
+                                <div class="col-lg-4">
+
+                                    <div class="card shadow mb-4 border-bottom-primary">
+                                        <div class="card-header py-3">
+                                            <h6 class="m-0 font-weight-bold text-primary">Vehicle Details</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="text-center mb-3">
+                                                <i class="fas fa-motorcycle fa-3x text-gray-300"></i>
+                                            </div>
+                                            <h5 class="font-weight-bold text-center text-gray-800">
+                                                <%= job.vehicleDetails ? job.vehicleDetails.brand : '' %>
+                                                    <%= job.vehicleDetails ? job.vehicleDetails.model
+                                                        : 'Unknown Vehicle' %>
+                                            </h5>
+                                            <p class="text-center text-gray-500 mb-4 border-bottom pb-3">
+                                                Reg No: <strong>
+                                                    <%= job.vehicleDetails ? job.vehicleDetails.vehicleNumber : 'N/A' %>
+                                                </strong>
+                                            </p>
+
+                                            <div class="small text-gray-600">
+                                                <div><strong>Customer:</strong>
+                                                    <%= job.customerDetails ? job.customerDetails.name : 'Unknown' %>
+                                                </div>
+                                                <div><strong>Promised By:</strong>
+                                                    <%= new Date(job.preferredDate).toLocaleDateString() %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card shadow mb-4 border-bottom-danger">
+                                        <div class="card-header py-3">
+                                            <h6 class="m-0 font-weight-bold text-danger">Customer Complaint</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <h6 class="font-weight-bold">Requested Services:</h6>
+                                            <ul>
+                                                <% if(job.serviceType && job.serviceType.length> 0) { %>
+                                                    <% job.serviceType.forEach(service=> { %>
+                                                        <li>
+                                                            <%= service %>
+                                                        </li>
+                                                        <% }) %>
+                                                            <% } else { %>
+                                                                <li>No specific services listed.</li>
+                                                                <% } %>
+                                            </ul>
+                                            <hr>
+                                            <h6 class="font-weight-bold">Issue Description:</h6>
+                                            <p class="mb-0 text-gray-700">
+                                                <%= job.description || 'No additional details provided.' %>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-lg-8">
+                                    <div class="card shadow mb-4">
+                                        <div
+                                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-gray-800">Mechanic Workspace</h6>
+                                            <span class="badge badge-primary px-3 py-2">In Progress</span>
+                                        </div>
+
+                                        <div class="card-body">
+
+                                            <form action="/mechanic/update-Job/<%= job._id %>" method="POST"
+                                                enctype="multipart/form-data">
+
+                                                <div class="form-group mb-4">
+                                                    <label class="font-weight-bold text-gray-800"
+                                                        for="repairNotes">Repair Notes (What did you fix?)</label>
+                                                    <textarea class="form-control" id="repairNotes" name="repairNotes"
+                                                        rows="4"
+                                                        placeholder="e.g., Changed engine oil, tightened chain, and replaced rear brake pads..."
+                                                        required><%= job.repairNotes || '' %></textarea>
+                                                    <small class="form-text text-muted">These notes will be saved to the
+                                                        vehicle's history.</small>
+                                                </div>
+
+                                                <div class="form-group mb-4">
+                                                    <label class="font-weight-bold text-gray-800" for="finalCost">Total
+                                                        Service Cost (₹)</label>
+                                                    <input type="number" class="form-control" id="finalCost"
+                                                        name="finalCost" value="<%= job.finalCost || '' %>"
+                                                        placeholder="Enter final amount" required>
+                                                </div>
+
+                                                <div class="form-group mb-4">
+                                                    <label class="font-weight-bold text-gray-800" for="image">Upload
+                                                        'After' Photo <span class="text-danger">*</span></label>
+                                                    <input type="file" class="form-control-file border p-2 rounded"
+                                                        id="image" name="image" accept="image/*" required>
+                                                    <small class="form-text text-danger">An image is mandatory to
+                                                        complete this job card.</small>
+                                                </div>
+
+                                                <hr>
+
+                                                <button type="submit"
+                                                    class="btn btn-success btn-lg btn-block shadow-sm font-weight-bold mt-4">
+                                                    <i class="fas fa-check-circle mr-2"></i> Mark Job as Completed
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                    </div>
+            </div>
+            <%- include('partials/footer') %>
+                <%- include('partials/scripts') %>

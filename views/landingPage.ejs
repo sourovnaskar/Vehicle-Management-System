@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoSpace | Vehicle Service Management</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5', // The main AutoSpace Indigo
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased flex flex-col min-h-screen">
+
+    <nav class="fixed w-full z-50 top-0 bg-white shadow-sm border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <a href="/" class="flex-shrink-0 flex items-center text-decoration-none">
+                    <div class="text-3xl font-black text-brand-600 tracking-tight">
+                        Auto<span class="text-slate-800">Space</span>
+                    </div>
+                </a>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-slate-600 hover:text-brand-600 font-medium transition-colors">Features</a>
+                    <a href="#how-it-works" class="text-slate-600 hover:text-brand-600 font-medium transition-colors">How it Works</a>
+                    
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        <a href="/dashboard" class="bg-brand-100 text-brand-700 px-6 py-2.5 rounded-lg font-bold hover:bg-brand-200 transition-colors flex items-center gap-2">
+                            <i class="fas fa-columns"></i> Go to Dashboard
+                        </a>
+                    <% } else { %>
+                        <div class="flex items-center gap-4 border-l pl-8 border-slate-200">
+                            <a href="/login" class="text-slate-600 hover:text-brand-600 font-bold transition-colors">Login</a>
+                            <a href="/register" class="bg-brand-600 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-brand-700 shadow-md shadow-brand-500/30 hover:shadow-lg transition-all hover:-translate-y-0.5">
+                                Get Started
+                            </a>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow pt-28 pb-16 lg:pt-36 lg:pb-24 overflow-hidden relative">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-brand-50 rounded-full blur-3xl opacity-70 pointer-events-none -z-10"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-100 text-brand-700 font-semibold text-sm mb-8 border border-brand-200 shadow-sm">
+                <i class="fas fa-star text-yellow-500"></i> Premium Vehicle Care
+            </div>
+            
+            <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
+                Modern Auto Repair, <br class="hidden md:block" />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-blue-500">
+                    Completely Transparent.
+                </span>
+            </h1>
+            
+            <p class="mt-4 max-w-2xl text-lg md:text-xl text-slate-600 mx-auto mb-10 leading-relaxed">
+                Book services online, track your vehicle's repair progress in real-time, and view transparent invoices. The smart way to manage your garage visits.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="/register" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-brand-600 text-white font-bold text-lg hover:bg-brand-700 shadow-lg shadow-brand-500/30 hover:shadow-xl transition-all hover:-translate-y-1 flex items-center justify-center gap-2">
+                    <i class="fas fa-calendar-check"></i> Book a Service
+                </a>
+                <a href="/login" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white text-slate-700 border-2 border-slate-200 font-bold text-lg hover:border-brand-600 hover:text-brand-600 transition-colors flex items-center justify-center gap-2">
+                    <i class="fas fa-search"></i> Track My Vehicle
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <section id="features" class="py-20 bg-white border-t border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center mb-16">
+                <h2 class="text-brand-600 font-bold tracking-wide uppercase text-sm mb-2">Why AutoSpace?</h2>
+                <h3 class="text-3xl md:text-4xl font-extrabold text-slate-900">Everything you need, in one place.</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow border-t-4 border-t-brand-500">
+                    <div class="w-14 h-14 bg-brand-50 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-line text-2xl text-brand-600"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-3">Live Progress Tracking</h4>
+                    <p class="text-slate-600 leading-relaxed">
+                        No more calling the shop. Watch your vehicle's status update from "Pending" to "In Progress" to "Completed" right from your phone.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow border-t-4 border-t-emerald-500">
+                    <div class="w-14 h-14 bg-emerald-50 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-camera text-2xl text-emerald-600"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-3">Photo Verification</h4>
+                    <p class="text-slate-600 leading-relaxed">
+                        Our mechanics upload "After" photos upon completing the job. See exactly what was fixed before you even arrive for pickup.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow border-t-4 border-t-blue-500">
+                    <div class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-file-invoice-dollar text-2xl text-blue-600"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-3">Transparent Billing</h4>
+                    <p class="text-slate-600 leading-relaxed">
+                        Receive detailed, automated HTML invoices directly to your inbox with a clear breakdown of labor, taxes, and final costs.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-900 text-slate-400 py-12 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-2xl font-black text-white tracking-tight">
+                Auto<span class="text-brand-500">Space</span>
+            </div>
+            
+            <div class="flex space-x-6 text-sm">
+                <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                <a href="#" class="hover:text-white transition-colors">Contact Support</a>
+            </div>
+
+            <p class="text-sm">
+                &copy; <%= new Date().getFullYear() %> AutoSpace Garage System.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

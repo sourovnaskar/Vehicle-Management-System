@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Verification</title>
+    <style>
+        /* Base page styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F4F7FF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* The main container */
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            box-sizing: border-box; /* Ensures padding doesn't break the width */
+        }
+
+        /* Typography */
+        h2 { 
+            margin-top: 0; 
+            color: #111827; 
+        }
+        
+        p { 
+            color: #4B5563; 
+            margin-bottom: 25px; 
+            line-height: 1.5;
+            font-size: 15px; 
+        }
+
+        /* Form Elements */
+        input[type="email"] {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 20px;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            background: #F9FAFB;
+            font-size: 15px;
+            outline: none;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        input[type="email"]:focus {
+            border-color: #4F46E5;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        button:hover { 
+            opacity: 0.9; 
+        }
+
+        /* Flash Message Alert Box */
+        .alert-error {
+            background-color: #FEE2E2;
+            color: #991B1B;
+            border: 1px solid #F87171;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Verify Your Account</h2>
+        <p>Enter your registered email address to receive a new OTP.</p>
+        
+        <% if (errorMsg && errorMsg.length > 0) { %>
+            <div class="alert-error"><%= errorMsg %></div>
+        <% } %>
+
+        <form action="/send-new-otp" method="POST">
+            <input type="email" name="email" placeholder="Enter your email" required autocomplete="email">
+            <button type="submit">Send OTP</button>
+        </form>
+    </div>
+</body>
+</html>

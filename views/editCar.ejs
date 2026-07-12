@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Vehicle</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .form-container {
+            background-color: #ffffff;
+            max-width: 450px;
+            width: 100%;
+            padding: 2.5rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 2rem;
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        input {
+            width: 100%;
+            padding: 0.85rem;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            color: #2d3748;
+            transition: all 0.2s ease;
+        }
+        input:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+        }
+        button {
+            width: 100%;
+            padding: 0.85rem;
+            background-color: #3182ce; /* A professional, trustworthy blue */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            margin-top: 1rem;
+        }
+        button:hover {
+            background-color: #2b6cb0;
+        }
+        button:active {
+            transform: translateY(1px); /* Slight click effect */
+        }
+        .cancel-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .cancel-link a {
+            color: #718096;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+        .cancel-link a:hover {
+            color: #4a5568;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        
+        <h1>Edit Page</h1>
+
+        <form action="/vehicle/update-car/<%-data._id %>" method="post">
+
+            <div class="form-group">
+                <label for="vehicleNumber">Vehicle Number (License Plate)</label>
+                <input type="text" id="vehicleNumber" name="vehicleNumber" required value="<%=data.vehicleNumber%>">
+            </div>
+
+            <div class="form-group">
+                <label for="brand">Brand</label>
+                <input type="text" id="brand" name="brand" required value="<%=data.brand%>">
+            </div>
+
+            <div class="form-group">
+                <label for="model">Model</label>
+                <input type="text" id="model" name="model" required value="<%=data.model%>">
+            </div>
+
+            <div class="form-group">
+                <label for="year">Manufacture Year</label>
+                <input type="number" id="year" name="year" required min="1886" max="2100" value="<%=data.year%>">
+            </div>
+
+            <button type="submit">Update Vehicle</button>
+        </form>
+
+        <div class="cancel-link">
+            <a href="/vehicle/dashboard">Cancel and return to dashboard</a>
+        </div>
+        
+    </div>
+
+</body>
+</html>

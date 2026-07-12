@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= pageTitle %></title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #28a745; /* Changed to green for Mechanics */
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background-color: #f8f9fa;
+            color: #444;
+            font-weight: 600;
+        }
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .badge.verified {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .badge.unverified {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .btn-action {
+            background-color: #28a745; /* Green action button */
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            text-decoration: none;
+        }
+        .btn-action:hover {
+            background-color: #218838;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-container">
+            <h1>Mechanic Roster</h1>
+            <a href="/admin/rendermechanics" class="btn-action">+ Add Mechanic</a>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Account Status</th>
+                    <th>Joined Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (mechanicFind && mechanicFind.length > 0) { %>
+                    <% mechanicFind.forEach(function(mechanic) { %>
+                        <tr>
+                            <td><strong><%= mechanic.name %></strong></td>
+                            <td><%= mechanic.email %></td>
+                            <td>
+                                <% if (mechanic.isVerified) { %>
+                                    <span class="badge verified">Verified</span>
+                                <% } else { %>
+                                    <span class="badge unverified">Unverified</span>
+                                <% } %>
+                            </td>
+                            <td><%= new Date(mechanic.createdAt).toLocaleDateString('en-IN') %></td>
+                            <td>
+                                <a href="/admin/mechanic/<%= mechanic._id %>/assignments" class="btn-action">View Assignments</a>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="5" class="empty-state">No mechanics found in the system.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

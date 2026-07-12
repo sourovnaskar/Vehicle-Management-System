@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Service | AutoSpace</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800 font-sans flex justify-center items-center min-h-screen p-4">
+
+    <div class="bg-white max-w-2xl w-full rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+
+        <div class="bg-indigo-600 px-8 py-6 text-white flex justify-between items-center">
+            <div>
+                <h2 class="text-2xl font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-wrench"></i> Book a Service
+                </h2>
+                <p class="text-indigo-100 text-sm mt-1">Schedule maintenance or repair for your vehicle
+                </p>
+            </div>
+            <a href="/vehicle/dashboard"
+                class="text-indigo-100 hover:text-white transition-colors text-sm font-medium flex items-center gap-1">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </a>
+        </div>
+
+        <% if (errorMsg && errorMsg.length > 0) { %>
+            <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mx-8 mt-6 rounded shadow-sm flex items-center gap-3">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <p><%= errorMsg %></p>
+            </div>
+        <% } %>
+
+        <% if (successMsg && successMsg.length > 0) { %>
+            <div class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 mx-8 mt-6 rounded shadow-sm flex items-center gap-3">
+                <i class="fa-solid fa-circle-check"></i>
+                <p><%= successMsg %></p>
+            </div>
+        <% } %>
+        <form action="/service/book" method="POST" class="p-8 space-y-6">
+
+            <div>
+                <label for="vehicleId" class="block text-sm font-bold text-slate-700 mb-2">
+                    <i class="fa-solid fa-car-side text-indigo-500 mr-1"></i> Select Vehicle
+                </label>
+                <div class="relative">
+                    <select id="vehicleId" name="vehicleId" required
+                        class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all bg-slate-50 text-slate-700 appearance-none">
+                        <option value="" disabled selected>-- Choose a vehicle from your garage --</option>
+                        <% if (user && user.myCars && user.myCars.length > 0) { %>
+                            <% user.myCars.forEach(function(car) { %>
+                                <option value="<%= car._id %>">
+                                    <%= car.brand %> <%= car.model %> (<%= car.vehicleNumber %>)
+                                </option>
+                            <% }) %>
+                        <% } else { %>
+                            <option value="" disabled>No vehicles found. Please add one first.</option>
+                        <% } %>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                        <i class="fa-solid fa-chevron-down text-sm"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-3">
+                    <i class="fa-solid fa-list-check text-indigo-500 mr-1"></i> Service Type
+                </label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+                        <input type="checkbox" name="serviceType" value="General Service"
+                            class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        <span class="ml-3 text-slate-700 font-medium">General Service</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+                        <input type="checkbox" name="serviceType" value="Oil Change"
+                            class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        <span class="ml-3 text-slate-700 font-medium">Oil Change</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+                        <input type="checkbox" name="serviceType" value="Engine Repair"
+                            class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        <span class="ml-3 text-slate-700 font-medium">Engine Repair</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+                        <input type="checkbox" name="serviceType" value="Brake Service"
+                            class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        <span class="ml-3 text-slate-700 font-medium">Brake Service</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+                        <input type="checkbox" name="serviceType" value="Other"
+                            class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        <span class="ml-3 text-slate-700 font-medium">Other</span>
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <label for="preferredDate" class="block text-sm font-bold text-slate-700 mb-2">
+                    <i class="fa-regular fa-calendar-days text-indigo-500 mr-1"></i> Preferred Date
+                </label>
+                <input type="date" id="preferredDate" name="preferredDate" required
+                    class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all bg-slate-50 text-slate-700">
+            </div>
+
+            <div>
+                <label for="problemDescription" class="block text-sm font-bold text-slate-700 mb-2">
+                    <i class="fa-solid fa-circle-exclamation text-indigo-500 mr-1"></i> Problem Description
+                </label>
+                <textarea id="problemDescription" name="problemDescription" rows="4"
+                    placeholder="e.g., Engine making an unusual rattling noise when accelerating..."
+                    class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all bg-slate-50 text-slate-700 resize-none"></textarea>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100">
+                <button type="submit"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-md shadow-indigo-200 transition-all transform hover:-translate-y-0.5 flex justify-center items-center gap-2">
+                    <i class="fa-solid fa-calendar-check"></i> Confirm Booking
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</body>
+</html>

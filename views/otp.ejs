@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F4F7FF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .otp-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #111827;
+        }
+
+        p {
+            color: #4B5563;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .email-highlight {
+            font-weight: 600;
+            color: #4F46E5;
+        }
+
+        /* Flash Message Styles */
+        .alert {
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-error {
+            background-color: #FEE2E2;
+            color: #991B1B;
+            border: 1px solid #F87171;
+        }
+
+        .otp-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .otp-input {
+            width: 50px;
+            height: 60px;
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            background: #F9FAFB;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .otp-input:focus {
+            border-color: #4F46E5;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="otp-card">
+        <h2>Verify Your Email</h2>
+        <p>We've sent a 4-digit verification code to <br><span class="email-highlight">
+                <%= email %>
+            </span></p>
+
+        <% if (errorMsg && errorMsg.error && errorMsg.error.length> 0) { %>
+            <div class="alert alert-error">
+                <%= errorMsg.error %>
+            </div>
+            <% } %>
+                <% if (successMsg && successMsg.length> 0) { %>
+                    <div
+                        style="color: green; background-color: #dfd; padding: 10px; margin-bottom: 15px; border: 1px solid green; border-radius: 5px;">
+                        <%= successMsg %>
+                    </div>
+                    <% } %>
+
+                        <form action="/verify-otp" method="POST" id="otpForm">
+
+                            <input type="hidden" name="email" value="<%= email %>">
+
+                            <div class="otp-container">
+                                <input type="text" class="otp-input" maxlength="1" required autocomplete="off">
+                                <input type="text" class="otp-input" maxlength="1" required autocomplete="off">
+                                <input type="text" class="otp-input" maxlength="1" required autocomplete="off">
+                                <input type="text" class="otp-input" maxlength="1" required autocomplete="off">
+                            </div>
+
+                            <input type="hidden" name="otp" id="finalOtp">
+
+                            <button type="submit">Verify Account</button>
+                        </form>
+    </div>
+
+    <script>
+        const inputs = document.querySelectorAll('.otp-input');
+        const form = document.getElementById('otpForm');
+        const finalOtpInput = document.getElementById('finalOtp');
+
+        // Focus the first input on page load
+        window.onload = () => inputs[0].focus();
+
+        inputs.forEach((input, index) => {
+            input.addEventListener('keyup', (e) => {
+                // Auto-advance on number entry
+                if (e.key >= '0' && e.key <= '9') {
+                    if (index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                }
+                // Auto-reverse on backspace
+                else if (e.key === 'Backspace') {
+                    if (index > 0) {
+                        inputs[index - 1].focus();
+                    }
+                }
+            });
+
+            // Restrict input to numbers only
+            input.addEventListener('keypress', (e) => {
+                if (e.key < '0' || e.key > '9') {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Combine inputs before submitting
+        form.addEventListener('submit', (e) => {
+            let otpValue = '';
+            inputs.forEach(input => {
+                otpValue += input.value;
+            });
+            finalOtpInput.value = otpValue;
+        });
+    </script>
+
+</body>
+
+</html>

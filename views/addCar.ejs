@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Car</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .form-container {
+            background-color: #ffffff;
+            max-width: 450px;
+            width: 100%;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        input:focus {
+            outline: none;
+            border-color: #0056b3;
+            box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.2);
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #28a745; /* Changed to green to indicate an "add" action */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 1rem;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .message-block {
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+        .success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+        }
+        .back-link a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Add a New Vehicle</h2>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="message-block error">
+                <%= error %>
+            </div>
+        <% } %>
+        <% if (typeof success !== 'undefined' && success) { %>
+            <div class="message-block success">
+                <%= success %>
+            </div>
+        <% } %>
+
+        <form action="/vehicle/create" method="POST">
+            
+            <div class="form-group">
+                <label for="vehicleNumber">Vehicle Number (License Plate)</label>
+                <input type="text" id="vehicleNumber" name="vehicleNumber" required placeholder="e.g., ABC-1234">
+            </div>
+
+            <div class="form-group">
+                <label for="brand">Brand</label>
+                <input type="text" id="brand" name="brand" required placeholder="e.g., Toyota">
+            </div>
+
+            <div class="form-group">
+                <label for="model">Model</label>
+                <input type="text" id="model" name="model" required placeholder="e.g., Camry">
+            </div>
+
+            <div class="form-group">
+                <label for="year">Manufacture Year</label>
+                <input type="number" id="year" name="year" required min="1886" max="2100" placeholder="e.g., 2023">
+            </div>
+
+            <button type="submit">Add Vehicle</button>
+        </form>
+
+        <div class="back-link">
+            <a href="/vehicle/dashboard">&larr; Back to Dashboard</a>
+        </div>
+    </div>
+
+</body>
+</html>

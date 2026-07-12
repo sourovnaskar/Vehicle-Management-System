@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Management - VSMS</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #444;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .badge.verified {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge.unverified {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn-action {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            text-decoration: none;
+        }
+
+        .btn-action:hover {
+            background-color: #0056b3;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+
+
+        .hidden-row-td {
+            padding: 0 !important;
+            border-bottom: none !important;
+        }
+
+
+        .slide-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            padding: 0 20px;
+
+            transition: max-height 0.4s ease-out, opacity 0.3s ease-in, padding 0.4s ease;
+        }
+
+
+        .slide-content.open {
+            max-height: 400px;
+
+            opacity: 1;
+            padding: 20px;
+
+            border-bottom: 1px solid #eee;
+        }
+
+        .badge.active-user {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge.inactive-user {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #555;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 8px 15px;
+            background-color: #e9ecef;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .btn-back:hover {
+            background-color: #007bff;
+            /* Matches your blue header */
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <a href="/admin/dashboard" class="btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </a>
+        <div class="header-container">
+            <h1>Customer Details</h1>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Email Status</th>
+                    <th>Account Status</th>
+                    <th>Registered Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (customerFind && customerFind.length> 0) { %>
+                    <% customerFind.forEach(function(customer, index) { %>
+
+                        <tr>
+                            <td><strong>
+                                    <%= customer.name %>
+                                </strong></td>
+
+                            <td>
+                                <%= customer.email %>
+                            </td>
+
+                            <td>
+                                <% if (customer.isVerified) { %>
+                                    <span class="badge verified">Verified</span>
+                                <% } else { %>
+                                    <span class="badge unverified">Unverified</span>
+                                <% } %>
+                            </td>
+
+                            <td>
+                                <% if (customer.isActive !==false) { %>
+                                    <span class="badge active-user">Active</span>
+                                    <% } else { %>
+                                        <span class="badge inactive-user">Inactive</span>
+                                        <% } %>
+                            </td>
+
+                            <td>
+                                <%= new Date(customer.createdAt).toLocaleDateString() %>
+                            </td>
+
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-action" onclick="toggleVehicles('vehicles-<%= index %>')">
+                                        View Vehicles
+                                    </button>
+
+                                    <form action="/admin/customer/<%= customer._id %>/toggle-status" method="POST"
+                                        style="margin: 0;">
+                                        <% if (customer.isActive !==false) { %>
+                                            <button type="submit" class="btn-action btn-danger">Deactivate</button>
+                                            <% } else { %>
+                                                <button type="submit" class="btn-action btn-success">Activate</button>
+                                                <% } %>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr style="background-color: #f8f9fa;">
+                            <td colspan="6" class="hidden-row-td">
+                                <div id="vehicles-<%= index %>" class="slide-content">
+                                    <h4 style="margin-top: 0; color: #fd7e14;">Registered Vehicles</h4>
+
+                                    <% if (customer.vehicles && customer.vehicles.length> 0) { %>
+                                        <ul style="list-style-type: none; padding-left: 0; margin: 0;">
+                                            <% customer.vehicles.forEach(function(vehicle) { %>
+                                                <li style="padding: 8px 0; border-bottom: 1px solid #ddd;">
+                                                    <strong>
+                                                        <%= vehicle.brand %>
+                                                            <%= vehicle.model %>
+                                                    </strong>
+                                                    <span style="color: #666; margin-left: 10px;">(<%=
+                                                            vehicle.vehicleNumber %>)</span>
+                                                </li>
+                                                <% }); %>
+                                        </ul>
+                                        <% } else { %>
+                                            <p style="color: #666; margin: 0;">No vehicles registered to this customer.
+                                            </p>
+                                            <% } %>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <% }); %>
+                            <% } %>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+<script>
+    function toggleVehicles(rowId) {
+        const contentDiv = document.getElementById(rowId);
+
+        // Toggle the 'open' class
+        if (contentDiv.classList.contains('open')) {
+            contentDiv.classList.remove('open'); // Slides up
+        } else {
+            contentDiv.classList.add('open'); // Slides down
+        }
+    }
+</script>
+
+</html>

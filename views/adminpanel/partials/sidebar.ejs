@@ -1,0 +1,77 @@
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin/dashboard">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-wrench"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Auto Space <sup>Admin Panel</sup></div>
+    </a>
+
+    <hr class="sidebar-divider my-0">
+
+    <li class="nav-item active">
+        <a class="nav-link" href="/admin/dashboard">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span></a>
+    </li>
+
+    <hr class="sidebar-divider">
+
+    <div class="sidebar-heading">
+        Management
+    </div>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers"
+            aria-expanded="true" aria-controls="collapseUsers">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Users</span>
+        </a>
+        <div id="collapseUsers" class="collapse" aria-labelledby="headingUsers" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Manage People:</h6>
+                <a class="collapse-item" href="/admin/admindashboard">Customers</a>
+                <a class="collapse-item" href="/admin/mechanics">Mechanics</a>
+            </div>
+        </div>
+    </li>
+
+
+
+    <hr class="sidebar-divider">
+
+    <div class="sidebar-heading">
+        Operations
+    </div>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseServices"
+            aria-expanded="true" aria-controls="collapseServices">
+            <i class="fas fa-fw fa-tools"></i>
+            <span>Service & Repairs</span>
+        </a>
+        <div id="collapseServices" class="collapse" aria-labelledby="headingServices"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Workshop:</h6>
+                <a class="collapse-item" href="/admin/job-cards">Active Job Cards</a>
+                <a class="collapse-item" href="/admin/job-history">Service History</a>
+            </div>
+        </div>
+    </li>
+
+    
+
+    <li class="nav-item">
+        <a class="nav-link" href="/admin/billing">
+            <i class="fas fa-fw fa-file-invoice-dollar"></i>
+            <span>Billing & Invoices</span></a>
+    </li>
+
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</ul>

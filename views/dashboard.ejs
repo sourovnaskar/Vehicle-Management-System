@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garage Dashboard</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Sidebar Hover & Click Transitions */
+        .sidebar {
+            transition: width 0.3s ease-in-out;
+            width: 70px;
+            /* Collapsed width */
+            overflow: hidden;
+        }
+
+        /* Expands on hover OR when the 'expanded' class is clicked */
+        .sidebar:hover,
+        .sidebar.expanded {
+            width: 250px;
+        }
+
+        .sidebar .nav-text {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .sidebar:hover .nav-text,
+        .sidebar.expanded .nav-text {
+            opacity: 1;
+            transition-delay: 0.1s;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 font-sans flex h-screen overflow-hidden">
+
+    <aside class="sidebar bg-slate-900 text-white flex flex-col shadow-2xl z-20 relative" id="sidebar"
+        onclick="toggleSidebar()">
+        <div class="h-16 flex items-center px-6 border-b border-slate-700 cursor-pointer">
+            <i class="fa-solid fa-bars text-xl text-slate-300"></i>
+            <span class="nav-text ml-4 font-bold text-lg tracking-wider text-indigo-400">MENU</span>
+        </div>
+
+        <nav class="flex-1 pt-4">
+            <a href="/vehicle/track-progress"
+                class="flex items-center px-6 py-4 hover:bg-slate-800 transition-colors border-l-4 border-transparent hover:border-indigo-500">
+                <i class="fa-solid fa-chart-line text-xl min-w-[24px] text-slate-300"></i>
+                <span class="nav-text ml-4 font-medium">Track Progress</span>
+            </a>
+        </nav>
+    </aside>
+
+    <div class="flex-1 flex flex-col h-screen overflow-y-auto">
+
+        <header
+            class="h-16 bg-white shadow-sm flex items-center justify-between px-8 border-b border-gray-200 sticky top-0 z-10">
+            <div class="text-2xl font-black text-indigo-600 tracking-tight">
+                Auto<span class="text-slate-800">Space</span>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <div
+                    class="flex items-center gap-2 text-slate-700 bg-slate-100 px-4 py-1.5 rounded-full font-medium shadow-inner">
+                    <i class="fa-solid fa-user-circle text-indigo-500 text-lg"></i>
+                    <span>
+                        <%= user.name %>
+                    </span>
+                </div>
+                <a href="/logout"
+                    class="text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-md font-semibold transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+            </div>
+        </header>
+
+        <main class="p-8 max-w-7xl mx-auto w-full">
+
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h1 class="text-3xl font-extrabold text-slate-900">Dashboard</h1>
+                    <p class="text-slate-500 mt-1">Manage your vehicles and track your garage.</p>
+                </div>
+                <a href="/vehicle/addcar"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold shadow-md transition-transform transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Add New Vehicle
+                </a>
+                <a href="/service/booking-view"
+                    class="bg-violet-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold shadow-md transition-transform transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Book Service
+                </a>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-warehouse text-slate-400"></i> Your Garage
+                </h2>
+
+                <% if (user.myCars && user.myCars.length> 0) { %>
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        <% user.myCars.forEach(function(car) { %>
+
+                            <div
+                                class="bg-slate-50 rounded-xl p-6 border border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all relative group">
+
+                                <div
+                                    class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white p-1.5 rounded-lg shadow-sm border border-slate-100">
+                                    <a href="/vehicle/edit-car/<%= car._id %>"
+                                        class="text-blue-500 hover:text-blue-700 p-1.5 rounded hover:bg-blue-50 transition-colors"
+                                        title="Edit">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    <!-- <form action="/vehicle/delete/<%= car._id %>?_method=DELETE" method="POST"
+                                        class="inline m-0"
+                                        onsubmit="return confirm('Are you sure you want to remove this vehicle?');">
+                                        <button type="submit"
+                                            class="text-red-500 hover:text-red-700 p-1.5 rounded hover:bg-red-50 transition-colors"
+                                            title="Remove">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form> -->
+
+                                    <!-- //modal form -->
+
+                                    <form id="delete-form-<%= car._id %>" action="/vehicle/delete/<%= car._id %>"
+                                        method="POST" class="inline m-0">
+                                        <button type="button" onclick="openDeleteModal('delete-form-<%= car._id %>')"
+                                            class="text-red-500 hover:text-red-700 p-1.5 rounded hover:bg-red-50 transition-colors"
+                                            title="Remove">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+
+                                    <!-- //Modal HTML -->
+
+                                    <div id="deleteModal"
+                                        class="fixed inset-0 z-50 flex items-center justify-center hidden bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+                                        <div id="modalContent"
+                                            class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 transform transition-all duration-300 scale-95 opacity-0 m-4">
+                                            <div class="flex flex-col items-center text-center">
+
+                                                <div
+                                                    class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                                                    <i
+                                                        class="fa-solid fa-triangle-exclamation text-3xl text-red-600"></i>
+                                                </div>
+
+                                                <h3 class="text-2xl font-bold text-slate-900 mb-2">Delete Vehicle?</h3>
+                                                <p class="text-slate-500 mb-8">Are you sure you want to remove this
+                                                    vehicle from your garage? This action cannot be undone.</p>
+
+                                                <div class="flex gap-3 w-full">
+                                                    <button onclick="closeDeleteModal()"
+                                                        class="flex-1 px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition-colors">
+                                                        Cancel
+                                                    </button>
+                                                    <button id="confirmDeleteBtn"
+                                                        class="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold transition-colors shadow-md shadow-red-200 flex justify-center items-center gap-2">
+                                                        <i class="fa-solid fa-trash"></i> Yes, Delete
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col gap-1 mb-4 pt-2">
+                                    <div class="flex items-center gap-3 mb-1">
+                                        <div class="bg-indigo-100 text-indigo-600 p-2.5 rounded-lg">
+                                            <i class="fa-solid fa-motorcycle text-xl"></i>
+                                        </div>
+                                        <h3 class="text-xl font-bold text-slate-900">
+                                            <%= car.brand %>
+                                        </h3>
+                                    </div>
+                                    <h4 class="text-lg text-slate-700 font-medium pl-14">
+                                        <%= car.model %>
+                                    </h4>
+                                </div>
+
+                                <div class="mt-5 pt-4 border-t border-slate-200 flex justify-between items-center">
+                                    <span class="text-xs text-slate-500 uppercase tracking-widest font-bold">License
+                                        Plate</span>
+                                    <span
+                                        class="font-mono bg-yellow-100 text-yellow-800 px-3 py-1 rounded border border-yellow-300 font-bold text-sm">
+                                        <%= car.vehicleNumber %>
+                                    </span>
+                                </div>
+
+                                <div
+                                    class="absolute top-0 left-0 bg-slate-800 text-white text-xs font-bold px-3 py-1 rounded-br-lg rounded-tl-xl">
+                                    <%= car.year %>
+                                </div>
+                            </div>
+
+                            <% }) %>
+                    </div>
+                    <% } else { %>
+                        <div class="text-center py-16 bg-slate-50 rounded-xl border-2 border-dashed border-slate-300">
+                            <div
+                                class="bg-slate-200 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fa-solid fa-car-side text-3xl text-slate-400"></i>
+                            </div>
+                            <p class="text-lg text-slate-600 font-medium">You haven't added any vehicles yet.</p>
+                            <p class="text-slate-400 text-sm mt-1 mb-5">Click the button top right to populate your
+                                garage.</p>
+                            <a href="/vehicle/addcar"
+                                class="text-indigo-600 hover:text-indigo-800 font-bold px-4 py-2 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors">
+                                Add your first vehicle &rarr;
+                            </a>
+                        </div>
+                        <% } %>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Logic for clicking the sidebar to keep it open on mobile/tablets
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('expanded');
+        }
+    </script>
+</body>
+
+<script>
+    // Variable to store which form we want to submit
+    let currentFormToSubmitId = null;
+
+    // Grab the modal elements
+    const deleteModal = document.getElementById('deleteModal');
+    const modalContent = document.getElementById('modalContent');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+    function openDeleteModal(formId) {
+        // Save the specific form ID
+        currentFormToSubmitId = formId;
+
+        // Unhide the background container
+        deleteModal.classList.remove('hidden');
+
+        // Slight delay to allow CSS transitions to trigger
+        setTimeout(() => {
+            deleteModal.classList.remove('opacity-0');
+            modalContent.classList.remove('scale-95', 'opacity-0');
+            modalContent.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    }
+
+    function closeDeleteModal() {
+        // Clear the form ID
+        currentFormToSubmitId = null;
+
+        // Reverse the animation
+        deleteModal.classList.add('opacity-0');
+        modalContent.classList.remove('scale-100', 'opacity-100');
+        modalContent.classList.add('scale-95', 'opacity-0');
+
+        // Hide the container after the animation finishes
+        setTimeout(() => {
+            deleteModal.classList.add('hidden');
+        }, 300);
+    }
+
+    // When the user clicks "Yes, Delete"
+    confirmDeleteBtn.addEventListener('click', function () {
+        if (currentFormToSubmitId) {
+            // Change button state to show loading
+            this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Deleting...';
+            this.classList.add('opacity-75', 'cursor-not-allowed');
+
+            // Submit the form
+            document.getElementById(currentFormToSubmitId).submit();
+        }
+    });
+
+    // Optional: Close modal if user clicks anywhere outside the white box
+    deleteModal.addEventListener('click', function (e) {
+        if (e.target === deleteModal) {
+            closeDeleteModal();
+        }
+    });
+</script>
+
+</html>
